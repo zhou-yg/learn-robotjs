@@ -1,0 +1,19 @@
+{
+  "name": "learn-robotjs",
+  "version": "1.0.0",
+  "description": "robotjs playgrounds",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhou-yg/learn-robotjs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhou-yg/learn-robotjs/issues"
+  },
+  "homepage": "https://github.com/zhou-yg/learn-robotjs#readme"
+}
