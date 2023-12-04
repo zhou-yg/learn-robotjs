@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/zhou-yg/learn-robotjs/issues"
   },
-  "homepage": "https://github.com/zhou-yg/learn-robotjs#readme"
+  "homepage": "https://github.com/zhou-yg/learn-robotjs#readme",
+  "dependencies": {
+    "jimp": "^0.22.10",
+    "robotjs": "^0.6.0"
+  }
 }
