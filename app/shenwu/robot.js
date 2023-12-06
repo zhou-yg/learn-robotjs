@@ -1,6 +1,14 @@
 const robot = require("robotjs");
 const Jimp = require('jimp');
 
+async function mouseMoveAndClick (x, y) {
+  robot.moveMouse(x, y);
+
+  await sleep(10);  
+
+  robot.mouseClick();
+}
+
 /**
  * @param {Buffer} b1 
  * @param {Buffer} b2 
@@ -26,6 +34,16 @@ function colorDistance(c1, c2) {
 }
 
 class ImageData2D {
+  /**
+   * @param {*} x 
+   * @param {*} y 
+   * @param {*} w 
+   * @param {*} h 
+   * @returns ImageData2D
+   */
+  static capture (x, y, w, h) {
+    return new ImageData2D(robot.screen.capture(x,y,w,h))
+  }
   constructor (pic) {
     /**
      * @property {robot.Bitmap} pic
@@ -119,3 +137,12 @@ function logCapture (robotScreenPic, path) {
   });
 }
 
+function sleep (t) {
+  return new Promise(resolve => setTimeout(resolve, t))
+}
+
+Object.assign(exports, {
+  mouseMoveAndClick,
+  ImageData2D,
+  sleep,
+})
