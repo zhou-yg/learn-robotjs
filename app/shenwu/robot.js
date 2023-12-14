@@ -3,6 +3,8 @@ const Jimp = require('jimp');
 
 async function mouseMoveAndClick (x, y) {
   robot.moveMouse(x, y);
+  robot.moveMouse(x-1, y-1);
+  robot.moveMouse(x, y);
 
   await sleep(10);  
 
