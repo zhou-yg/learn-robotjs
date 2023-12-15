@@ -342,6 +342,8 @@ async function treasure70 (times = 10) {
 
   await showCalendar();
   await mouseMoveAndClick(...taskP);
+  await hold()
+  await closeCalendar();
 
   let i = 1;
   while (i <= times) {
@@ -355,10 +357,9 @@ async function treasure70 (times = 10) {
     await mouseMoveAndClick(...closeDialogP);
     await hold();
 
-    await closeCalendar();
-    await sleep(1000)
+    await hold()
     await showCalendar();  
-    await sleep(1000)
+    await hold()
     await mouseMoveAndClick(...taskP);  
     await closeCalendar();
 
@@ -422,14 +423,21 @@ focus().then(() => {
 
   Promise.resolve()
   .then(() => pk())
-  .then(() => treasure70(8))
+  .then(() => treasureAuto10())
+  .then(() => treasure70(2))
+  .then(() => treasure70())
+  .then(() => switchTab(1))
+  .then(() => pk())
+  .then(() => treasureAuto10())
   .then(() => treasure70())
   .then(() => treasure70())
   .then(() => treasure70())
   .then(() => treasure70())
   .then(() => switchTab(2))
   .then(() => pk())
-  .then(() => treasure70(3))
+  .then(() => treasureAuto10())
+  .then(() => treasure70(5))
+  .then(() => treasure70())
   .then(() => treasure70())
   .then(() => treasure70())
 })

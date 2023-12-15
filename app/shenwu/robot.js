@@ -1,5 +1,19 @@
 const robot = require("robotjs");
 const Jimp = require('jimp');
+const path = require('path');
+const fs = require('fs');
+
+const logDir = path.join(__dirname, '../../logs/', new Date().toString())
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir)
+}
+
+async function log (x, y) {
+  const screen = robot.getScreenSize();
+  const img = ImageData2D.capture(0, 0, screen.width, screen.height);
+  const logFile = path.join(logDir, `${new Date()}.jpg`);
+  await img.log(logFile, x, y)
+}
 
 async function mouseMoveAndClick (x, y) {
   robot.moveMouse(x, y);
@@ -8,6 +22,11 @@ async function mouseMoveAndClick (x, y) {
 
   await sleep(10);  
 
+  try {
+    // await log(x, y);
+  } catch (e) {
+    console.error('log error', e);
+  }
   robot.mouseClick();
 }
 
@@ -57,14 +76,18 @@ class ImageData2D {
     mapBGR2RGB(pic.image, this.imageData)
   }
   
-  save (path) {
-    logCapture(
+  save (path, markup) {
+    return logCapture(
       {
         ...this.pic,
-        image: this.imageData
+        image: this.imageData,
+        markup,
       },
       path,
     );
+  }
+  log (path, x, y) {
+    return this.save(path, [{ x, y, w: 10, h: 10 }])
   }
   /**
    * [0,1,2,3,4,5], 3x2
@@ -83,6 +106,27 @@ class ImageData2D {
       first + 2,
       first + 3
     ]
+  }
+
+  mark (x, y) {
+    const w = 10;
+    const h = 10;
+    
+    const sx = Math.max(0, x - w / 2);
+    const sy = Math.max(0, y - h / 2);
+    const ex = x + w / 2;
+    const ey = y + h / 2;
+
+    for(let i = sx; i < ex; i++) {
+      for (let j = sy; j < ey; j++) {
+        const first = i + j * this.width;
+        console.log('first: ', first);
+        this.imageData[first] = 255;
+        this.imageData[first + 1] = 255;
+        this.imageData[first + 2] = 255;
+        this.imageData[first + 3] = 255;
+      }
+    }
   }
 
   /**
@@ -126,11 +170,23 @@ function logCapture (robotScreenPic, path) {
         const image = new Jimp(robotScreenPic.width, robotScreenPic.height);
         let pos = 0;
         image.scan(0, 0, image.bitmap.width, image.bitmap.height, (x, y, idx) => {
-            image.bitmap.data[idx + 0] = robotScreenPic.image.readUInt8(pos++);
-            image.bitmap.data[idx + 1] = robotScreenPic.image.readUInt8(pos++);
-            image.bitmap.data[idx + 2] = robotScreenPic.image.readUInt8(pos++);
-            image.bitmap.data[idx + 3] = robotScreenPic.image.readUInt8(pos++);
+            image.bitmap.data[idx + 0] = robotScreenPic.image[pos++]
+            image.bitmap.data[idx + 1] = robotScreenPic.image[pos++]
+            image.bitmap.data[idx + 2] = robotScreenPic.image[pos++]
+            image.bitmap.data[idx + 3] = robotScreenPic.image[pos++]
         });
+        if (robotScreenPic.markup) {
+          robotScreenPic.markup.forEach(m => {            
+            const { x, y, w, h, color = [0, 0, 0, 255] } = m
+            image.scan(x, y, w, h, function (x, y, idx) {
+              image.bitmap.data[idx + 0] = color[0];
+              image.bitmap.data[idx + 1] = color[1];
+              image.bitmap.data[idx + 2] = color[2];
+              image.bitmap.data[idx + 3] = color[3];
+            });
+          })
+        }
+        
         image.write(path, resolve);
     } catch (e) {
         console.error(e);
