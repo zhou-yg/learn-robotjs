@@ -38,10 +38,15 @@ function screenCaptureToFile2(robotScreenPic, path) {
   });
 }
 
+exports.screenCaptureToFile2 = screenCaptureToFile2;
+
 var pic = robot.screen.capture(0, 0, width, height);
 console.log('pic: ', pic.image[0], pic.image[1], pic.image[2], pic.image[3]);
 // console.log('pic: ', pic.image instanceof Buffer);
 screenCaptureToFile2({
   ...pic,
-  markup: [{ x: 400, y: 300, w: 20, h: 20 }, { x: 402, y: 302, w: 16, h: 16, color: [255, 255, 0, 255] }]
-}, './imgs/ac2.jpg');
+  markup: [
+    { x: 0, y: 100, w: 30, h: 30 }, 
+    { x: 0, y: 100, w: 26, h: 26, color: [255, 255, 0, 255] 
+  }]
+}, './imgs/ac3.jpg');

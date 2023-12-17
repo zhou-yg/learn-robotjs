@@ -233,9 +233,12 @@ async function checkTeamStatus () {
 
 async function switchTab(index = 0) {
   robot.moveMouse(10, 60);
+  await sleep(1000)
+  robot.moveMouse(11, 61);
+  await sleep(1000)
   robot.moveMouse(9, 59);
 
-  await sleep(30)
+  await sleep(1000)
 
   await mouseMoveAndClick(
     110 + 200 * index,
@@ -261,7 +264,7 @@ async function pk (times = 4) {
   await closeCalendar();
   await showCalendar();
 
-  const taskP = taskPosition.t5;
+  const taskP = taskPosition.t4;
   await mouseMoveAndClick(...taskP);
   await hold();
   await hold();
@@ -273,12 +276,13 @@ async function pk (times = 4) {
     console.log('pk times: ', i, times);
     await mouseMoveAndClick(...opponentP);
     await hold();
-    await hold();
-    await hold();
     const sureP = [430, 470];
     await mouseMoveAndClick(...sureP);
     await sleep(10 * 1000);
     await refreshTurns();
+    /**
+     * switchTab(1)
+     */
     await sleep(5 * 60 * 1000);
   }
 
@@ -322,7 +326,7 @@ async function treasure70 (times = 10) {
   await closeCalendar();
   await showCalendar();
 
-  const taskP = taskPosition.t11
+  const taskP = taskPosition.t9;
   await mouseMoveAndClick(...taskP);
   await closeCalendar();
 
@@ -413,6 +417,21 @@ async function monster () {
   await mouseMoveAndClick(...matchPosition.button)
 }
 
+async function closeGame () {
+  robot.moveMouse(15, 40);
+  await sleep(1000)
+  robot.moveMouse(14, 41);
+  await sleep(1000)
+  robot.moveMouse(16, 40);
+
+  await sleep(1000)
+
+  await mouseMoveAndClick(
+    110 + 200 * index,
+    60,
+  );
+}
+
 /**
  * 1.pk
  * 2.treasure
@@ -422,24 +441,21 @@ async function monster () {
 focus().then(() => {
 
   Promise.resolve()
-  .then(() => pk())
-  .then(() => treasureAuto10())
-  .then(() => treasure70(2))
-  .then(() => treasure70())
-  .then(() => switchTab(1))
-  .then(() => pk())
-  .then(() => treasureAuto10())
-  .then(() => treasure70())
-  .then(() => treasure70())
-  .then(() => treasure70())
-  .then(() => treasure70())
-  .then(() => switchTab(2))
-  .then(() => pk())
-  .then(() => treasureAuto10())
-  .then(() => treasure70(5))
-  .then(() => treasure70())
-  .then(() => treasure70())
-  .then(() => treasure70())
+  // .then(() => pk(3))
+  // .then(() => treasure70())
+  // .then(() => treasure70())
+  // .then(() => treasure70())
+  // .then(() => treasure70())
+  // .then(() => switchTab(1))
+  // .then(() => pk(2))
+  // .then(() => treasure70())
+  // .then(() => treasure70())
+  // .then(() => treasure70())
+  // .then(() => treasure70(4))
+  // .then(() => switchTab(2))
+  // .then(() => treasure70())
+  // .then(() => treasure70(2))
+  // .then(() => closeGame())
 })
 
 

@@ -5,14 +5,16 @@ const fs = require('fs');
 
 const logDir = path.join(__dirname, '../../logs/', new Date().toString())
 if (!fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir)
+  fs.mkdirSync(logDir, { recursive: true })
 }
 
 async function log (x, y) {
   const screen = robot.getScreenSize();
   const img = ImageData2D.capture(0, 0, screen.width, screen.height);
-  const logFile = path.join(logDir, `${new Date()}.jpg`);
-  await img.log(logFile, x, y)
+  const d = new Date();
+  const name = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}-${d.getHours()}-${d.getMinutes()}-${d.getSeconds()}`
+  const logFile = path.join(logDir, `${name}.jpg`);
+  await img.log(logFile, x * 2, y * 2)
 }
 
 async function mouseMoveAndClick (x, y) {
@@ -23,7 +25,7 @@ async function mouseMoveAndClick (x, y) {
   await sleep(10);  
 
   try {
-    // await log(x, y);
+    await log(x, y);
   } catch (e) {
     console.error('log error', e);
   }
@@ -87,7 +89,10 @@ class ImageData2D {
     );
   }
   log (path, x, y) {
-    return this.save(path, [{ x, y, w: 10, h: 10 }])
+    return this.save(path, [
+      { x, y, w: 20, h: 20 },
+      { x: x + 2, y: y + 2, w: 18, h: 18, color: [255, 0, 0, 255] },
+    ])
   }
   /**
    * [0,1,2,3,4,5], 3x2
@@ -178,7 +183,8 @@ function logCapture (robotScreenPic, path) {
         if (robotScreenPic.markup) {
           robotScreenPic.markup.forEach(m => {            
             const { x, y, w, h, color = [0, 0, 0, 255] } = m
-            image.scan(x, y, w, h, function (x, y, idx) {
+            console.log('m: ', m);
+            image.scan(x, y, w, h, (x, y, idx) => {
               image.bitmap.data[idx + 0] = color[0];
               image.bitmap.data[idx + 1] = color[1];
               image.bitmap.data[idx + 2] = color[2];
