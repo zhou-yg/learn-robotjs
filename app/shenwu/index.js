@@ -244,6 +244,16 @@ async function switchTab(index = 0) {
     110 + 200 * index,
     60,
   );
+  await hold()
+}
+
+async function withTabs (callback) {
+  await switchTab(0);
+  await callback();
+  await switchTab(1)
+  await callback();  
+  await switchTab(2);
+  await callback();   
 }
 
 const taskPosition = {
@@ -261,99 +271,120 @@ const taskPosition = {
 
 async function pk (times = 4) {
   await focus();
-  await closeCalendar();
-  await showCalendar();
-
-  const taskP = taskPosition.t4;
-  await mouseMoveAndClick(...taskP);
-  await hold();
-  await hold();
-  const opponentP = [710, 590]
+  async function openTask () {
+    await closeCalendar();
+    await showCalendar();
   
-  let i = 1;
-  while (i <= times) {
-    i++
-    console.log('pk times: ', i, times);
+    const taskP = taskPosition.t5;
+    await mouseMoveAndClick(...taskP);
+    await hold();
+    await hold();
+  }
+  async function end () {
+    const closePkP = [880, 205];
+    await mouseMoveAndClick(...closePkP);
+    await hold();
+    await closeCalendar();
+  }
+  async function startPk () {
+    const opponentP = [710, 590]
     await mouseMoveAndClick(...opponentP);
     await hold();
     const sureP = [430, 470];
     await mouseMoveAndClick(...sureP);
-    await sleep(10 * 1000);
+    await sleep(5 * 1000);
     await refreshTurns();
-    /**
-     * switchTab(1)
-     */
-    await sleep(5 * 60 * 1000);
   }
-
-  const closePkP = [880, 205];
-  await mouseMoveAndClick(...closePkP);
-  await hold();
-  await closeCalendar();
-}
-
-async function treasureAuto10 () {
-  focus();
-  await closeCalendar();
-  await showCalendar();
-
-  const taskP = taskPosition.t6
-  await mouseMoveAndClick(...taskP);
-  await closeCalendar();
-
-  await sleep(20 * 1000);
-
-  const getTaskP = [450, 530];
-  await mouseMoveAndClick(...getTaskP);
-
-  await sleep(2 * 1000)
-
-  const xiangP = [906, 730];
-  await mouseMoveAndClick(...xiangP);
-
-  await showCalendar();
-  await mouseMoveAndClick(...taskP);
-  await sleep(20 * 1000);
-
-  await sleep(10 * 60 * 1000)
-  await refreshTurns();   
-  await sleep(10 * 60 * 1000)
-}
-
-async function treasure70 (times = 10) {
-  await focus();
-
-  await closeCalendar();
-  await showCalendar();
-
-  const taskP = taskPosition.t9;
-  await mouseMoveAndClick(...taskP);
-  await closeCalendar();
-
-  await sleep(15 * 1000);
-
-  const getTaskP = [450, 530];
-  await mouseMoveAndClick(...getTaskP);
-
-  await sleep(2 * 1000)
-
-  const xiangP = [906, 730];
-  await mouseMoveAndClick(...xiangP);
-
-  await hold();
-  const closeDialogP = [810, 433];
-  await mouseMoveAndClick(...closeDialogP);
-
-  await showCalendar();
-  await mouseMoveAndClick(...taskP);
-  await hold()
-  await closeCalendar();
+  await withTabs(
+    openTask
+  )
+ 
 
   let i = 1;
   while (i <= times) {
-    console.log('treasure70 times: ', i, times);
     i++
-    await sleep(100 * 1000);
+    console.log('pk times: ', i, times);
+
+    await withTabs(
+      startPk
+    )
+
+    await sleep(5 * 60 * 1000);
+  }
+
+  await withTabs(
+    end
+  )
+}
+pk();
+
+async function treasureAuto10 () {
+  focus();
+
+  async function getTask () {
+    await closeCalendar();
+    await showCalendar();
+  
+    const taskP = taskPosition.t6
+    await mouseMoveAndClick(...taskP);
+    await closeCalendar();
+  
+    await sleep(20 * 1000);
+  
+    const getTaskP = [450, 530];
+    await mouseMoveAndClick(...getTaskP);
+
+    await sleep(2 * 1000)
+  
+    const xiangP = [906, 730];
+    await mouseMoveAndClick(...xiangP);
+
+    await showCalendar();
+    await mouseMoveAndClick(...taskP);
+    await sleep(20 * 1000);
+  }
+
+  await withTabs(getTask)
+  await sleep(7 * 60 * 1000)
+  await withTabs(refreshTurns)
+  await sleep(8 * 60 * 1000)
+}
+
+async function treasure70 (times = 10, multi) {
+  await focus();
+
+  const exeFn = multi ? withTabs : (fn) => fn()
+
+  async function getTask () {
+
+    await closeCalendar();
+    await showCalendar();
+  
+    const taskP = taskPosition.t9;
+    await mouseMoveAndClick(...taskP);
+    await closeCalendar();
+  
+    await sleep(15 * 1000);
+  
+    const getTaskP = [450, 530];
+    await mouseMoveAndClick(...getTaskP);
+  
+    await sleep(2 * 1000)
+  
+    const xiangP = [906, 730];
+    await mouseMoveAndClick(...xiangP);
+  
+    await hold();
+    const closeDialogP = [810, 433];
+    await mouseMoveAndClick(...closeDialogP);
+
+    await showCalendar();
+    await mouseMoveAndClick(...taskP);
+    await hold()
+    await closeCalendar();
+  }
+
+  async function continueTask () {
     const continueGetTaskP = [450, 475];
     await mouseMoveAndClick(...continueGetTaskP);  
     await hold()
@@ -366,12 +397,28 @@ async function treasure70 (times = 10) {
     await hold()
     await mouseMoveAndClick(...taskP);  
     await closeCalendar();
-
-    if (i === 5) {
-      await refreshTurns();
-    }
   }
 
+  await exeFn(
+    getTask
+  )
+
+  let i = 1;
+  while (i <= times) {
+    console.log('treasure70 times: ', i, times);
+    i++
+    await sleep(100 * 1000);
+    
+    await exeFn(
+      continueTask
+    )
+
+    if (i === 5) {
+      await exeFn(
+        refreshTurns
+      )
+    }
+  }
 }
 
 
@@ -382,7 +429,7 @@ function refreshMultiTurns () {
 
   async function fn () {
     await refreshTurns();   
-    await sleep(100)
+    await hold()
 
     await switchTab((i++)%3);
 
