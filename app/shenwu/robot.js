@@ -18,18 +18,50 @@ async function log (x, y) {
 }
 
 async function mouseMoveAndClick (x, y) {
-  robot.moveMouse(x, y);
-  robot.moveMouse(x-1, y-1);
-  robot.moveMouse(x, y);
+  y = y + 20
+
+  robot.moveMouseSmooth(x, y);
+  robot.moveMouseSmooth(x - 1 , y + 1);
+  robot.moveMouseSmooth(x, y);
 
   await sleep(10);  
 
   try {
-    await log(x, y);
+    // await log(x, y);
   } catch (e) {
     console.error('log error', e);
   }
   robot.mouseClick();
+}
+async function clickOffset (x, y) {
+
+  robot.moveMouseSmooth(x, y);
+  robot.moveMouseSmooth(x - 1 , y + 1);
+  robot.moveMouseSmooth(x, y);
+
+  await sleep(10);  
+
+  try {
+    // await log(x, y);
+  } catch (e) {
+    console.error('log error', e);
+  }
+  robot.mouseClick();
+}
+async function rightClickOffset (x, y) {
+
+  robot.moveMouseSmooth(x, y);
+  robot.moveMouseSmooth(x - 1 , y + 1);
+  robot.moveMouseSmooth(x, y);
+
+  await sleep(10);  
+
+  try {
+    // await log(x, y);
+  } catch (e) {
+    console.error('log error', e);
+  }
+  robot.mouseClick('right');
 }
 
 /**
@@ -207,6 +239,8 @@ function sleep (t) {
 
 Object.assign(exports, {
   mouseMoveAndClick,
+  clickOffset,
+  rightClickOffset,
   ImageData2D,
   sleep,
 })
