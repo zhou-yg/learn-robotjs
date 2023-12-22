@@ -18,6 +18,10 @@ async function log (x, y) {
 }
 
 async function mouseMoveAndClick (x, y) {
+  if (Array.isArray(x)) {
+    y = x[1]
+    x = x[0]
+  }
   y = y + 20
 
   robot.moveMouseSmooth(x, y);
@@ -34,6 +38,10 @@ async function mouseMoveAndClick (x, y) {
   robot.mouseClick();
 }
 async function clickOffset (x, y) {
+  if (Array.isArray(x)) {
+    y = x[1]
+    x = x[0]
+  }
 
   robot.moveMouseSmooth(x, y);
   robot.moveMouseSmooth(x - 1 , y + 1);
