@@ -341,7 +341,7 @@ async function treasureAuto10 () {
     await closeCalendar();
     await showCalendar();
   
-    const taskP = taskPosition.t6
+    const taskP = taskPosition.t5
     await mouseMoveAndClick(...taskP);
     await closeCalendar();
   
@@ -545,19 +545,31 @@ async function littleThings0 (times = 11) {
       await clickOffset(...normalP);
       await hold()
     }
-  }
-  async function close () {
-    const p = [690, 296]
+
+    const p = [690, 290]
     await clickOffset(...p)
+  }
+  async function doThing2 () {
+    const plus = dvd([1548, 523])
+    await clickOffset(...plus)
     await hold()
-    await bottomEntries.box.close()
+    const button = dvd([1012,1162])
+    await clickOffset(...button)
+    await hold()
+
+    const closeP = dvd([1256,586])
+    await clickOffset(...closeP)
+    await hold()
   }
 
   await withTabs(openPanel)
 
   await withTabs(doThing)
+  await withTabs(doThing2)
 
-  await withTabs(close)
+  await withTabs(() => {
+    return bottomEntries.box.close()
+  })
 }
 
 const pkgPosition = {
@@ -628,6 +640,8 @@ async function xiulian () {
     // 寄售中心
     await leftEntries.shop.open()
     await hold()
+    await hold()
+    await hold()
 
     // 1
     const buyP = dvd([1112, 1331])
@@ -639,6 +653,8 @@ async function xiulian () {
     // 2
     await leftEntries.shop.open()
     await hold()
+    await hold()
+    await hold()
 
     await clickOffset(...buyP)
     await hold()
@@ -647,6 +663,9 @@ async function xiulian () {
     // 3
     await leftEntries.shop.open()
     await hold()
+    await hold()
+    await hold()
+
     await clickOffset(...buyP)
     await hold()
     await leftEntries.shop.close()
@@ -657,10 +676,12 @@ async function xiulian () {
     await closeCalendar()
 
     await sleep(45 * 1000)
+  }
 
-    const giveP1 = dvd([1030, 572])
-    const giveP2 = dvd([1080, 572])
-    const giveP3 = dvd([1130, 572])
+  async function give () {
+    const giveP1 = dvd([1038, 588])
+    const giveP2 = dvd([1128, 588])
+    const giveP3 = dvd([1235, 588])
     await clickOffset(...giveP1)
     await hold()
     await clickOffset(...giveP2)
@@ -699,13 +720,16 @@ async function xiulian () {
 
     closeCalendar()
   }
-
-  await prepare();
-  await goMaster();
-  await getTask()
+  // await goMaster()
+  // await prepare();
+  // await goMaster();
+  // await getTask()
+  // await gotoBuy()
+  await give()
   await gotoBuy()
+  await give()
   await gotoBuy()
-  await gotoBuy()
+  await give()
   await gotoVisitorAndFight()
 }
 
@@ -748,13 +772,11 @@ async function children () {
  */
 
 focus().then(() => {
-  // xiulian()
 
   Promise.resolve()
-  //  .then(() =>   littleThings0())
-    // .then(() => treasureAuto10())
-  // .then(() => treasure70(1))
-  // .then(() => pk(1))
-  // .then(() => treasure70())
-  // .then(() => pk(3))
+  //  .then(() => littleThings0())
+  //  .then(() => children())
+  //  .then(() => pk())
+  // .then(() => treasureAuto10())
+  .then(() => xiulian())
 })
