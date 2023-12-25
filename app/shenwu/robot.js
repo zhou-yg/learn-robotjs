@@ -44,7 +44,7 @@ async function clickOffset (x, y) {
   }
 
   robot.moveMouseSmooth(x, y);
-  robot.moveMouseSmooth(x - 1 , y + 1);
+  robot.moveMouseSmooth(x - 2 , y + 2);
   robot.moveMouseSmooth(x, y);
 
   await sleep(10);  

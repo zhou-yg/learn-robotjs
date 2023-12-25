@@ -243,7 +243,6 @@ async function switchTab(index = 0) {
     110 + 200 * index,
     60,
   );
-  await focus()
   await hold()
 }
 
@@ -292,7 +291,7 @@ async function pk (times = 4) {
     await closeCalendar();
     await showCalendar();
   
-    const taskP = tab === 0 ?  taskPosition.t4 : taskPosition.t5;
+    const taskP = taskPosition.t5;
     await mouseMoveAndClick(...taskP);
     await hold();
     await hold();
@@ -514,17 +513,18 @@ async function closeGame () {
 const bottomEntries = {
   box: {
     open: () => clickOffset(680, 820),
-    close: () => clickOffset(...dvd([1350, 417])),
+    close: () => clickOffset(...dvd([1342, 405])),
   },
 }
 const leftEntries = {
   shop: {
     open: () => clickOffset(...dvd([33, 712])),
-    close: () => clickOffset(...dvd([1677,433])),
+    close: () => clickOffset(...dvd([1669,422])),
     buy: () => clickOffset(...dvd([1112, 1331])),
   }
 }
 
+// hualongding
 async function littleThings0 (times = 11) {
   async function openPanel () {
     await bottomEntries.box.open()
@@ -532,12 +532,13 @@ async function littleThings0 (times = 11) {
     const entryP = [366, 300]
     await clickOffset(...entryP);
     await hold()
-    const xiulianP = [610, 260]
-    await clickOffset(...xiulianP);
-    await hold()
   }  
 
   async function doThing () {
+    const xiulianP = [610, 260]
+    await clickOffset(...xiulianP);
+    await hold()
+
     const normalP = [635, 390]
     let i = 0;
     while (i < times) {
@@ -567,9 +568,57 @@ async function littleThings0 (times = 11) {
   await withTabs(doThing)
   await withTabs(doThing2)
 
+  await withTabs(async () => {
+    const p  = dvd([1706,450])
+    await clickOffset(...p)
+  })
   await withTabs(() => {
     return bottomEntries.box.close()
   })
+}
+
+const topRightPosition = {
+  man: {
+    open: () => clickOffset(...dvd([1856, 217])),
+    close: () => clickOffset(...dvd([1371, 422])),
+
+    skill: {
+      open: () => clickOffset(...dvd([1316, 1328])),
+      close: () => clickOffset(...dvd([1360, 408])),
+
+      xiulian: () => clickOffset(...dvd([1403, 920])),
+      lianhua: {
+        open: () => clickOffset(...dvd([1236,1343])),
+        close: () => clickOffset(...dvd([1759,1072])),
+        do: () => clickOffset(...dvd([1682, 1336]))
+      }
+    }
+  }
+}
+
+// xiulianping
+async function littleThings2 () {
+  await topRightPosition.man.open()
+
+  await topRightPosition.man.skill.open()
+
+  await topRightPosition.man.skill.xiulian()
+  await topRightPosition.man.skill.lianhua.open()
+  await topRightPosition.man.skill.lianhua.do()
+  await hold()
+  await topRightPosition.man.skill.lianhua.do()
+  await hold()
+  await topRightPosition.man.skill.lianhua.do()
+  await hold()
+  await topRightPosition.man.skill.lianhua.do()
+  await hold()
+  await topRightPosition.man.skill.lianhua.do()
+  await hold()
+  await topRightPosition.man.skill.lianhua.close()
+
+  await topRightPosition.man.skill.close()
+
+  await topRightPosition.man.close()
 }
 
 const pkgPosition = {
@@ -619,7 +668,7 @@ async function xiulian () {
     await hold()
   }
 
-  const targetTask = taskPosition2.t2;
+  const targetTask = taskPosition2.t1;
 
   async function getTask () {
     await showCalendar()
@@ -675,7 +724,6 @@ async function xiulian () {
     await hold()
     await closeCalendar()
 
-    await sleep(45 * 1000)
   }
 
   async function give () {
@@ -720,17 +768,19 @@ async function xiulian () {
 
     closeCalendar()
   }
-  // await goMaster()
-  // await prepare();
-  // await goMaster();
-  // await getTask()
-  // await gotoBuy()
-  await give()
-  await gotoBuy()
-  await give()
-  await gotoBuy()
-  await give()
-  await gotoVisitorAndFight()
+  // await withTabs(prepare)
+  // await withTabs(goMaster)
+  // await withTabs(getTask)
+  // await withTabs(gotoBuy)
+  // await sleep(30 * 1000)
+  // await withTabs(give)
+  await withTabs(gotoBuy)
+  await sleep(30 * 1000)
+  await withTabs(give)
+  await withTabs(gotoBuy)
+  await sleep(30 * 1000)
+  await withTabs(give)
+  await withTabs(gotoVisitorAndFight)
 }
 
 async function children () {
@@ -740,6 +790,11 @@ async function children () {
 
   await rightClickOffset(...pkgPosition.a4)
   await hold()
+  // daily
+  const dailyP = [1028, 1324]
+  await clickOffset(...dailyP)
+  await hold()
+
   // task
   const taskEntryP = dvd([895,1327])
   await clickOffset(...taskEntryP)
@@ -761,6 +816,9 @@ async function children () {
   await hold()
 
   // close response
+  await clickOffset(...dvd([1628,908]))
+
+  await hold()
   await clickOffset(...dvd([1509,435]))
   await hold()
 }
@@ -776,6 +834,7 @@ focus().then(() => {
   Promise.resolve()
   //  .then(() => littleThings0())
   //  .then(() => children())
+  //  .then(() => littleThings2())
   //  .then(() => pk())
   // .then(() => treasureAuto10())
   .then(() => xiulian())
