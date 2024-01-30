@@ -291,7 +291,7 @@ async function pk (times = 4) {
     await closeCalendar();
     await showCalendar();
   
-    const taskP = taskPosition.t5;
+    const taskP = taskTabsMap.pk[tab];
     await mouseMoveAndClick(...taskP);
     await hold();
     await hold();
@@ -325,7 +325,7 @@ async function pk (times = 4) {
       startPk
     )
 
-    await sleep(3.5 * 60 * 1000);
+    await sleep(6 * 60 * 1000);
   }
 
   await withTabs(
@@ -336,11 +336,11 @@ async function pk (times = 4) {
 async function treasureAuto10 () {
   focus();
 
-  async function getTask () {
+  async function getTask (tab) {
     await closeCalendar();
     await showCalendar();
   
-    const taskP = taskPosition.t5
+    const taskP = taskTabsMap.treasureAuto10[tab]
     await mouseMoveAndClick(...taskP);
     await closeCalendar();
   
@@ -369,9 +369,8 @@ async function treasure70 (times = 10, single) {
 
   const exeFn = single ?  (fn) => fn() : withTabs
 
-  const taskP = taskPosition.t10;
-
-  async function getTask () {
+  async function getTask (tab) {
+    const taskP = taskTabsMap.treasure70[tab];
 
     await closeCalendar();
     await showCalendar();
@@ -380,7 +379,9 @@ async function treasure70 (times = 10, single) {
     await closeCalendar();
   
   }
-  async function getTask2 () {
+  async function getTask2 (tab) {
+    const taskP = taskTabsMap.treasure70[tab];
+
     const getTaskP = [450, 530];
     await mouseMoveAndClick(...getTaskP);
   
@@ -399,7 +400,9 @@ async function treasure70 (times = 10, single) {
     await closeCalendar();
   }
 
-  async function continueTask () {
+  async function continueTask (tab) {
+    const taskP = taskTabsMap.treasure70[tab];
+
     const continueGetTaskP = [450, 480];
     await mouseMoveAndClick(...continueGetTaskP);  
     await hold()
@@ -432,7 +435,7 @@ async function treasure70 (times = 10, single) {
       getTask2
     )
 
-    await sleep(50 * 1000);
+    await sleep(80 * 1000);
 
     if (i <= times) {
       await exeFn(
@@ -472,27 +475,33 @@ function refreshMultiTurns () {
   fn();
 }
 
-const teamPosition = {
-  team: [754, 798],
-  teamMatchTab: [830, 360],
-}
-const matchPosition = {
-  button: [],
-  monster: [],
-}
-
 async function monster () {
   focus();
 
-  await mouseMoveAndClick(...teamPosition.team)
-  await hold();
+  async function match () {
+    
+      await bottomEntries.team.open()
+      await bottomEntries.team.open()
+      await hold();
+    
+      await bottomEntries.team.match()
+      await hold();
+    
+      await bottomEntries.team.t2()
+      await hold();
+    
+      await bottomEntries.team.startMatch()
+    
 
-  await mouseMoveAndClick(...teamPosition.teamMatchTab);
-  await hold();
+  }
 
-  await mouseMoveAndClick(...matchPosition.monster)
-  await hold();
-  await mouseMoveAndClick(...matchPosition.button)
+  await withTabs(refreshTurns)
+
+  await hold()
+
+  await withTabs(match)
+
+  await sleep(60 * 1000 * 10)
 }
 
 async function closeGame () {
@@ -515,6 +524,12 @@ const bottomEntries = {
     open: () => clickOffset(680, 820),
     close: () => clickOffset(...dvd([1342, 405])),
   },
+  team: {
+    open: () => clickOffset(...dvd([1519, 1638])),
+    match: () => clickOffset(...dvd([1670, 755])),
+    t2: () => clickOffset(...dvd([539, 730])),
+    startMatch: () => clickOffset(...dvd([1300, 1320])),
+  }
 }
 const leftEntries = {
   shop: {
@@ -668,7 +683,7 @@ async function xiulian () {
     await hold()
   }
 
-  const targetTask = taskPosition2.t1;
+  const targetTask = taskTabsMap.xiulian[0];
 
   async function getTask () {
     await showCalendar()
@@ -694,10 +709,15 @@ async function xiulian () {
 
     // 1
     const buyP = dvd([1112, 1331])
+    const secondConfirmP = dvd([864, 983])
     await clickOffset(...buyP)
     await hold()
+    await clickOffset(...secondConfirmP)
+    await hold()
+
     await leftEntries.shop.close()
     await hold()
+    
 
     // 2
     await leftEntries.shop.open()
@@ -707,6 +727,9 @@ async function xiulian () {
 
     await clickOffset(...buyP)
     await hold()
+    await clickOffset(...secondConfirmP)
+    await hold()
+
     await leftEntries.shop.close()
     await hold()
     // 3
@@ -717,6 +740,9 @@ async function xiulian () {
 
     await clickOffset(...buyP)
     await hold()
+    await clickOffset(...secondConfirmP)
+    await hold()
+
     await leftEntries.shop.close()
 
     await showCalendar()
@@ -768,12 +794,12 @@ async function xiulian () {
 
     closeCalendar()
   }
-  // await withTabs(prepare)
-  // await withTabs(goMaster)
-  // await withTabs(getTask)
-  // await withTabs(gotoBuy)
-  // await sleep(30 * 1000)
-  // await withTabs(give)
+  await withTabs(prepare)
+  await withTabs(goMaster)
+  await withTabs(getTask)
+  await withTabs(gotoBuy)
+  await sleep(30 * 1000)
+  await withTabs(give)
   await withTabs(gotoBuy)
   await sleep(30 * 1000)
   await withTabs(give)
@@ -781,6 +807,77 @@ async function xiulian () {
   await sleep(30 * 1000)
   await withTabs(give)
   await withTabs(gotoVisitorAndFight)
+}
+
+async function xunyou (times = 16) {
+  async function gotoTask (tab) {
+    await closeCalendar()
+    await hold()
+    await showCalendar();
+
+    await taskTabsMap.xunyou[tab]()
+
+    await closeCalendar()
+
+    const startP = dvd([886, 1007])
+
+    await sleep(10 * 1000)
+
+    await closeCalendar()
+
+    await clickOffset(...startP)
+
+
+    await hold()
+
+    const enterP = dvd([1229, 1267])
+    await clickOffset(...enterP)
+  }
+  async function doTask (tab) {
+
+    await refreshTurns()
+    await hold()
+
+    const goP = dvd([318, 524])
+    // const startP = dvd([861, 1009])
+    const startP = [dvd([861, 973]),
+    dvd([861, 983]),
+    dvd([861, 993]),
+    dvd([861, 1003]),
+    dvd([861, 1013]),
+    dvd([861, 1023]),
+    dvd([861, 1033]),
+    dvd([861, 1039])]
+
+    clickOffset(...goP)
+    await sleep(5 * 1000)
+
+    let i = 0;
+    while (i < times) {
+      i++
+      for (const p of startP) {
+        await clickOffset(...p)
+        await sleep(2000)
+      }
+      await sleep(70 * 1000)
+    }
+  }
+
+  async function leave () {
+    const leaveP = dvd([871, 983])
+    await clickOffset(...leaveP)
+    
+    const totalLeaveP2 = dvd([1030, 814])
+    await clickOffset(...totalLeaveP2)
+  }
+
+
+  await withTabs(gotoTask)
+
+  await hold()
+
+  await withTabs(doTask)
+  await withTabs(leave)
 }
 
 async function children () {
@@ -829,13 +926,47 @@ async function children () {
  * 3.monster
  */
 
+const taskTabsMap = {
+  pk: [
+    taskPosition.t5,
+    taskPosition.t5,
+    taskPosition.t5,
+  ],
+  treasureAuto10: [
+    taskPosition.t6,
+    taskPosition.t6,
+    taskPosition.t6,
+  ],
+  treasure70: [
+    taskPosition.t10,
+    taskPosition.t10,
+    taskPosition.t10,
+  ],
+  xiulian: [
+    taskPosition2.t2,
+    taskPosition2.t2,
+    taskPosition2.t2,
+  ],
+  xunyou: [
+    taskPosition2.t5,
+    taskPosition2.t5,
+    taskPosition2.t5,
+  ]
+}
 focus().then(() => {
 
   Promise.resolve()
-  //  .then(() => littleThings0())
-  //  .then(() => children())
-  //  .then(() => littleThings2())
-  //  .then(() => pk())
-  // .then(() => treasureAuto10())
+  // .then(() => pk())
+  // .then(() => littleThings0())
+  .then(() => treasureAuto10())
+  .then(() => xunyou(8))
   .then(() => xiulian())
+  .then(() => monster())
+  // .then(() => treasure70())
+  // .then(() => treasure70())
+  // .then(() => treasure70())
+  // .then(() => treasure70())
+  // .then(() => treasure70())
+  //  .then(() => littleThings2())
+  //  .then(() => children())
 })
