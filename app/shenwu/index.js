@@ -83,6 +83,37 @@ async function refreshTurns () {
   await mouseMoveAndClick(155, 770);
   await mouseMoveAndClick(154, 769);
 }
+async function refreshFBTurns () {
+
+  const boxCloseP = dvd([1407, 645])
+  const dialogCloseP = dvd([1617, 910])
+
+  await hold()
+
+  clickOffset(...boxCloseP)
+
+  await hold()
+
+  clickOffset(...dialogCloseP)
+
+  await hold()
+  // const img = ImageData2D.capture(
+  //   0,
+  //   758,
+  //   200,
+  //   20
+  // );
+    
+  // await img.save(turnsJPG);
+
+  // await sleep(30)
+  // const result = ocrScan(turnsJPG);
+  // console.log('result: ', result);
+
+  // need move
+  await mouseMoveAndClick(155, 770);
+  await mouseMoveAndClick(154, 769);
+}
 
 function moveToMaster () {
 
@@ -469,6 +500,25 @@ function refreshMultiTurns () {
 
     if ((Date.now() - st) < 15 * 60 * 1000) {
       setTimeout(fn, 2 * 60 * 1000);
+    }
+  }
+
+  fn();
+}
+function refreshFBMultiTurns () {
+  let i = 0;
+
+  const st = Date.now();
+
+  async function fn () {
+    await refreshFBTurns();   
+    await hold()
+
+    await switchTab((i++)%3);
+
+    if ((Date.now() - st) < 120 * 60 * 1000) {
+      setTimeout(fn, 2 * 60 * 1000);
+      // setTimeout(fn, 5 * 1000);
     }
   }
 
@@ -933,9 +983,9 @@ const taskTabsMap = {
     taskPosition.t5,
   ],
   treasureAuto10: [
-    taskPosition.t6,
-    taskPosition.t6,
-    taskPosition.t6,
+    taskPosition.t5,
+    taskPosition.t5,
+    taskPosition.t5,
   ],
   treasure70: [
     taskPosition.t10,
@@ -948,22 +998,22 @@ const taskTabsMap = {
     taskPosition2.t2,
   ],
   xunyou: [
-    taskPosition2.t5,
-    taskPosition2.t5,
-    taskPosition2.t5,
+    taskPosition2.t4,
+    taskPosition2.t3,
+    taskPosition2.t3,
   ]
 }
 focus().then(() => {
 
   Promise.resolve()
+    .then(() => refreshFBMultiTurns())
   // .then(() => pk())
   // .then(() => littleThings0())
-  .then(() => treasureAuto10())
-  .then(() => xunyou(8))
-  .then(() => xiulian())
-  .then(() => monster())
+  // .then(() => treasureAuto10())
   // .then(() => treasure70())
-  // .then(() => treasure70())
+  // .then(() => xiulian())
+  // .then(() => monster())
+  // .then(() => xunyou(4))
   // .then(() => treasure70())
   // .then(() => treasure70())
   // .then(() => treasure70())
